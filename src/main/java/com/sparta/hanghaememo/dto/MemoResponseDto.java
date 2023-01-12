@@ -20,7 +20,7 @@ public class MemoResponseDto {
         this.id = memo.getId();
         this.title = memo.getTitle();
         this.contents = memo.getContents();
-        this.username = memo.getUsername();
+        this.username = memo.getUser().getUsername();
         this.createdAt = memo.getCreatedAt();
         this.modifiedAt = memo.getModifiedAt();
     }

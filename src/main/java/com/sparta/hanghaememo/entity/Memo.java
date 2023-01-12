@@ -13,10 +13,6 @@ public class Memo extends Timestamped {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
-    private String username;
-
-
     private String password;
 
     @Column
@@ -26,13 +22,13 @@ public class Memo extends Timestamped {
     private String title;
 
     @ManyToOne
-//    @JoinColumn(name = "USR_ID", nullable = false)
+    @JoinColumn(name = "USR_ID", nullable = false)
     private User user;
 
-    public Memo(MemoRequestDto requestDto, String username) {
+    public Memo(MemoRequestDto requestDto, User user) {
         this.contents = requestDto.getContents();
         this.title = requestDto.getTitle();
-        this.username = username;
+        this.user = user;
         this.password = requestDto.getPassword();
     }
 

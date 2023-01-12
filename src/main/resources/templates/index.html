@@ -24,6 +24,7 @@
                 url: "/api/memos",
                 data: {},
                 success: function (response) {
+                    console.log(response)
                     for (let i = 0; i < response.length; i++) {
                         let message = response[i];
                         let id = message['id'];
