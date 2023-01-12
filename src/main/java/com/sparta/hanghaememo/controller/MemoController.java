@@ -3,14 +3,11 @@ package com.sparta.hanghaememo.controller;
 
 import com.sparta.hanghaememo.dto.MemoRequestDto;
 import com.sparta.hanghaememo.dto.MemoResponseDto;
-import com.sparta.hanghaememo.dto.SuccessResponseDto;
-import com.sparta.hanghaememo.entity.UserRoleEnum;
-//import com.sparta.hanghaememo.service.MemoService;
+import com.sparta.hanghaememo.dto.ResponseMessageDto;
 import com.sparta.hanghaememo.security.UserDetailsImpl;
 import com.sparta.hanghaememo.service.MemoService;
-import jakarta.servlet.http.HttpServletRequest;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,10 +20,9 @@ public class MemoController {
 
     private final MemoService memoService;
 
+    //홈페이지
     @GetMapping("/")
-    public ModelAndView home() {
-        return new ModelAndView("index");
-    }
+    public ModelAndView home() { return new ModelAndView("index"); }
 
     //게시글 작성
 //    @Secured(value = UserRoleEnum.Authority.ADMIN)
@@ -56,7 +52,7 @@ public class MemoController {
 
     //게시글 삭제
     @DeleteMapping("/api/memos/{id}")
-    public SuccessResponseDto deleteMemo(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseMessageDto deleteMemo(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return memoService.deleteMemo(id, userDetails.getUser());
     }
 }

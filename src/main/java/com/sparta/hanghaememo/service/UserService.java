@@ -6,6 +6,7 @@ import com.sparta.hanghaememo.entity.User;
 import com.sparta.hanghaememo.entity.UserRoleEnum;
 import com.sparta.hanghaememo.jwt.JwtUtil;
 import com.sparta.hanghaememo.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class UserService {
     // ADMIN_TOKEN
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
+    //회원가입하기
     @Transactional
     public void signup(SignupRequestDto signupRequestDto) {
         String username = signupRequestDto.getUsername();
@@ -46,10 +48,11 @@ public class UserService {
             role = UserRoleEnum.ADMIN;
         }
 
-        User user = new User(username, password, email, role); //회원가입 정보를 넣은 유저객체를 생성
-        userRepository.save(user); //유저 테이블 저장
+        User user = new User(username, password, email, role); //회원가입 정보를 넣은 유저엔티티를 생성
+        userRepository.save(user); //유저 테이블에 저장
     }
 
+    //로그인하기
     @Transactional(readOnly = true)
     public void login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         String username = loginRequestDto.getUsername();
@@ -65,7 +68,7 @@ public class UserService {
             throw  new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        //헤더에 권한과 토큰을 넣어줌
+        //헤더에 jwt 넣어줌
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
     }
 }

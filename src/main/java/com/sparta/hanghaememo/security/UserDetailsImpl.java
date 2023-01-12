@@ -2,6 +2,7 @@ package com.sparta.hanghaememo.security;
 
 import com.sparta.hanghaememo.entity.User;
 import com.sparta.hanghaememo.entity.UserRoleEnum;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,20 +10,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@RequiredArgsConstructor
 public class UserDetailsImpl implements UserDetails {
 
     private final User user;
     private final String username;
 
-    public UserDetailsImpl(User user, String username) {
-        this.user = user;
-        this.username = username;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
+    //권한을 리턴
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         UserRoleEnum role = user.getRole();
@@ -32,7 +26,12 @@ public class UserDetailsImpl implements UserDetails {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(simpleGrantedAuthority);
 
-        return authorities; //권한을 리턴
+        return authorities;
+    }
+
+    //getter
+    public User getUser() {
+        return user;
     }
 
     @Override

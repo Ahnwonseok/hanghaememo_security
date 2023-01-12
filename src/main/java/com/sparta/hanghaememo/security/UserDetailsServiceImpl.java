@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-//  username/password 인증방식을 사용할 때 사용자를 조회하고 검증한 후 UserDetails를 반환한다.
+//  Username, Password 인증방식을 사용할 때 사용자를 조회하고 검증한 후 UserDetails 를 반환한다.
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;

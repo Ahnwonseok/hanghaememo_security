@@ -3,12 +3,14 @@ package com.sparta.hanghaememo.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.hanghaememo.dto.SecurityExceptionDto;
 import io.jsonwebtoken.Claims;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -19,14 +21,14 @@ import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
-///////JWT를 검증한다 --> 다른 모든 API요청을 할 때 마다(?)////////
+///////모든 API 요청을 할 때 마다 JWT 를 검증한다////////
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final com.sparta.hanghaememo.jwt.JwtUtil jwtUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-//        System.out.println("매번 실행되나요?");-->네
+        //토큰을 받는다.
         String token = jwtUtil.resolveToken(request);
 
         if(token != null) {

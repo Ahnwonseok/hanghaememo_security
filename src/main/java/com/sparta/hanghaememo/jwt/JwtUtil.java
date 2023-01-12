@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,31 +24,31 @@ import java.util.Date;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-//////////////JWT생성,해독,유효성검사,
+/////JWT 생성,해독,유효성 검사/////
 public class JwtUtil {
 
     private final UserDetailsServiceImpl userDetailsService;
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String AUTHORIZATION_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
-    private static final long TOKEN_TIME = 60 * 60 * 1000L;
+    private static final long TOKEN_TIME = 600 * 60 * 1000L;
 
     @Value("${jwt.secret.key}")
     private String secretKey;
     private Key key;
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
+    //키 만들기
     @PostConstruct
     public void init() {
         byte[] bytes = Base64.getDecoder().decode(secretKey);
-
         key = Keys.hmacShaKeyFor(bytes); //키를 가지고 있어야 로그인, 조회, 저장이 가능하다.
     }
 
     // header 토큰을 가져오기
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        //받아온 토큰(유저의 정보)이 있는지
+        //받아온 토큰(유저의 정보)이 있고 BEARER 이 맞는지
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(7);
         }
@@ -56,7 +57,7 @@ public class JwtUtil {
 
     // 토큰 생성
     public String createToken(String username, UserRoleEnum role) {
-        Date date = new Date();
+        Date date = new Date(); //오늘 날짜
 
         return BEARER_PREFIX +
                 Jwts.builder()
@@ -91,8 +92,9 @@ public class JwtUtil {
     }
     //인증 객체 생성
     public Authentication createAuthentication(String username) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username); //사용자 권한 반환
-        //식별자(이름)    비밀번호               권한
+        //사용자 권한 반환
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                                                      //식별자(이름)    비밀번호               권한
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 }
